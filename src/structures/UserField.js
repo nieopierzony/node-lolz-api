@@ -3,7 +3,7 @@
 const Base = require('./Base');
 
 class UserField extends Base {
-  constructor(client, data) {
+  constructor(client, data = {}) {
     super(client);
     this.id = data.id;
     this._patch(data);

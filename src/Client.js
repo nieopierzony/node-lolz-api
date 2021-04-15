@@ -1,6 +1,7 @@
 'use strict';
 
 const RESTManager = require('./api/RESTManager');
+const ProfilePostManager = require('./managers/ProfilePostManager');
 const UserManager = require('./managers/UserManager');
 const { DefaultOptions } = require('./util/Constants');
 const Util = require('./util/Util');
@@ -11,6 +12,7 @@ class Client {
     this.api = new RESTManager(this, options.tokenType);
     this.token = null;
 
+    this.profilePosts = new ProfilePostManager(this);
     this.users = new UserManager(this);
     this.user = null;
   }

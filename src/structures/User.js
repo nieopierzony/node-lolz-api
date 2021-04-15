@@ -8,10 +8,14 @@ const UserGroupManager = require('../managers/UserGroupManager');
 const { Sizes } = require('../util/Constants');
 
 class User extends Base {
-  constructor(client, data) {
+  constructor(client, data = {}) {
     super(client);
     this.id = data.user_id;
     this._patch(data);
+  }
+
+  getProfilePosts(options, cache) {
+    return this.client.profilePosts.fetchUserPosts(this.id, options, cache);
   }
 
   async uploadAvatar(buffer) {

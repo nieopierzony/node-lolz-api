@@ -81,6 +81,14 @@ class UserManager extends BaseManager {
     const data = await this.client.api.request('GET', endpoint);
     return this.add(data.user, cache);
   }
+
+  async fetchAll(options = {}, cache = true) {
+    const endpoint = this.client.api.endpoints.Users.getAll();
+    const data = await this.client.api.request('GET', endpoint, {
+      query: { page: options.page, limit: options.limit },
+    });
+    return { links: data.links, usersCount: data.users_total, users: data.users.map(user => this.add(user, cache)) };
+  }
 }
 
 module.exports = UserManager;

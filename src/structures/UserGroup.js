@@ -3,7 +3,7 @@
 const Base = require('./Base');
 
 class UserGroup extends Base {
-  constructor(client, data) {
+  constructor(client, data = {}) {
     super(client);
     this.id = data.user_group_id;
     this._patch(data);

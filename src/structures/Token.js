@@ -3,7 +3,7 @@
 const Base = require('./Base');
 
 class Token extends Base {
-  constructor(client, data) {
+  constructor(client, data = {}) {
     super(client);
     this.userID = data.user_id;
     this.createdAtTimestamp = Date.now();
