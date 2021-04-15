@@ -31,16 +31,14 @@ class APIRequest {
     };
     let headers = Util.mergeDefault(defaultHeaders, this.options.headers);
 
-    // TODO: Add files uploader
     let data;
     if (this.options.data) {
-      const form = new FormData();
+      data = new FormData();
       Object.entries(this.options.data).forEach(([key, value]) => {
-        if (value) form.append(key, value);
+        if (value) data.append(key, value, 'avatar.jpg');
       });
 
-      data = form;
-      headers = { ...headers, ...form.getHeaders() };
+      headers = { ...headers, ...data.getHeaders() };
     }
 
     return axios.request({ method: this.method, url: this.path, data, headers });
