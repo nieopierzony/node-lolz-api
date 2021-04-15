@@ -5,9 +5,6 @@ const UserManager = require('./managers/UserManager');
 const { DefaultOptions } = require('./util/Constants');
 const Util = require('./util/Util');
 
-/**
- * Главный класс для взаимодействия с LolzTeam API
- */
 class Client {
   constructor(options = {}) {
     this.options = Util.mergeDefault(DefaultOptions, options);
