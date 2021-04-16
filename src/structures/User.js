@@ -15,82 +15,43 @@ class User extends Base {
   }
 
   getProfilePosts(options, cache) {
-    return this.client.profilePosts.fetchUserPosts(this.id, options, cache);
+    return this.client.users.getProfilePosts(this.id, options, cache);
   }
 
-  async uploadAvatar(buffer) {
-    if (!buffer || !(buffer instanceof Buffer)) throw new TypeError('Неправильно указан баффер аватарки');
-    const endpoint = this.client.api.endpoints.Users.uploadAvatar(this.id);
-    await this.client.api.request('POST', endpoint, { data: { avatar: buffer } });
-    return this.update();
+  uploadAvatar(buffer) {
+    return this.client.users.uploadAvatar(this.id, buffer);
   }
 
-  async deleteAvatar() {
-    const endpoint = this.client.api.endpoints.Users.uploadAvatar(this.id);
-    await this.client.api.request('DELETE', endpoint);
-    return this.update();
+  deleteAvatar() {
+    return this.client.users.deleteAvatar(this.id);
   }
 
-  async getFollowers(query = {}) {
-    const endpoint = this.client.api.endpoints.Users.getFollowers(this.id);
-    const res = await this.client.api.request('GET', endpoint, { query });
-    return res.users.map(user => {
-      this.client.users.add(user);
-
-      // Если импортировать этот класс сверху, то получается ошибка,
-      // из-за того, что FollowerUser инициализируется раньше.
-      const FollowerUser = require('./FollowerUser');
-      return new FollowerUser(this.client, user)();
-    });
+  getFollowers(query = {}) {
+    return this.client.users.getFollowers(this.id, query);
   }
 
   update() {
     return this.client.users.fetch(this.id);
   }
 
-  async follow() {
-    const endpoint = this.client.api.endpoints.Users.follow(this.id);
-    await this.client.api.request('POST', endpoint);
-    return this.update();
+  follow() {
+    return this.client.users.follow(this.id);
   }
 
-  async unfollow() {
-    const endpoint = this.client.api.endpoints.Users.unfollow(this.id);
-    await this.client.api.request('POST', endpoint);
-    return this.update();
+  unfollow() {
+    return this.client.users.unfollow(this.id);
   }
 
-  async getFollowings(query = {}) {
-    const endpoint = this.client.api.endpoints.Users.getFollowings(this.id);
-    const res = await this.client.api.request('GET', endpoint, { query });
-    const followings = res.users.map(user => {
-      this.client.users.add(user);
-
-      const FollowerUser = require('./FollowerUser');
-      return new FollowerUser(this.client, user);
-    });
-    return followings;
+  getFollowings(query = {}) {
+    return this.client.users.getFollowings(this.id, query);
   }
 
-  async getIgnored(onlyCount = false) {
-    if (this.id !== this.client.user.id) {
-      throw new Error('Эту функцию можно использовать только для собственного аккаунта');
-    }
-    const endpoint = this.client.api.endpoints.Users.Me.getIgnored();
-    const res = await this.client.api.request('GET', endpoint, { query: { total: onlyCount } });
-    return res.users.map(user => this.client.users.add(user));
+  ignore() {
+    return this.client.users.ignore(this.id);
   }
 
-  async ignore() {
-    const endpoint = this.client.api.endpoints.Users.ignore(this.id);
-    await this.client.api.request('POST', endpoint);
-    return this.update();
-  }
-
-  async unignore() {
-    const endpoint = this.client.api.endpoints.Users.unignore(this.id);
-    await this.client.api.request('DELETE', endpoint);
-    return this.update();
+  unignore() {
+    return this.client.users.unignore(this.id);
   }
 
   async getUserGroups() {
@@ -220,11 +181,11 @@ class User extends Base {
     }
 
     if ('fields' in data) {
-      this.fields = new UserFieldManager(this.client, data.fields, this.id);
+      this.fields = new UserFieldManager(this.client, data.fields, this);
     }
 
     if ('user_groups' in data) {
-      this.groups = new UserGroupManager(this.client, data.user_groups, this.id);
+      this.groups = new UserGroupManager(this.client, data.user_groups, this);
     }
 
     if ('user_external_authentications' in data) {
