@@ -27,6 +27,7 @@ class ProfilePost extends Base {
     return this.update();
   }
 
+  // TODO: Исправить
   async getComments(before) {
     if (before && !(before instanceof Date)) throw new TypeError("Значение 'before' должно быть типа Date");
     const endpoint = this.client.api.endpoints.ProfilePosts.getComments(this.id);
@@ -37,12 +38,20 @@ class ProfilePost extends Base {
   }
 
   update() {
-    return this.profilePosts.fetch(this.id);
+    return this.client.profilePosts.fetch(this.id);
+  }
+
+  edit(body) {
+    return this.client.profilePosts.edit(this.id, body);
+  }
+
+  delete() {
+    return this.client.profilePosts.delete(this.id);
   }
 
   async report(message) {
     if (!message && typeof message !== 'string') throw new TypeError("Поле 'message' должно быть типа string");
-    const endpoint = this.client.api.endpoints.profilePosts.report(this.id);
+    const endpoint = this.client.api.endpoints.ProfilePosts.report(this.id);
     await this.client.api.request('POST', endpoint, { data: { message } });
     return this.update();
   }
@@ -94,10 +103,6 @@ class ProfilePost extends Base {
     if ('post_is_liked' in data) {
       this.isLiked = Boolean(data.post_is_liked);
     }
-
-    // if ('latest_comments' in data) {
-    //   this.comments = new ProfilePostCommentManager(this.client, data.latest_comments);
-    // }
 
     if ('links' in data) {
       this.links = {
