@@ -2,7 +2,7 @@
 
 const User = require('./User');
 
-class FollowerUser extends User {
+class UserFollower extends User {
   get followedAt() {
     if (!this.followedTimestamp) return null;
     return new Date(this.followedTimestamp * 1000);
@@ -19,4 +19,4 @@ class FollowerUser extends User {
   }
 }
 
-module.exports = FollowerUser;
+module.exports = UserFollower;
