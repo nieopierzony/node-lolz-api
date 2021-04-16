@@ -20,7 +20,7 @@ class APIRequest {
         .flatMap(([key, value]) => (Array.isArray(value) ? value.map(v => [key, v]) : [[key, value]]));
       queryString = new URLSearchParams(query).toString();
     }
-    this.path = `${path}${queryString && `&${queryString}`}`;
+    this.path = `${path}${queryString && `${options.querySuffix ? options.querySuffix : '?'}${queryString}`}`;
   }
 
   execute() {
@@ -32,13 +32,18 @@ class APIRequest {
     let headers = Util.mergeDefault(defaultHeaders, this.options.headers);
 
     let data;
-    if (this.options.data) {
+    if (this.options.files) {
       data = new FormData();
-      Object.entries(this.options.data).forEach(([key, value]) => {
-        if (value) data.append(key, value, 'avatar.jpg');
+      Object.entries(this.options.files).forEach(([key, value]) => {
+        if (value) data.append(key, value, `${key}.jpg`);
       });
 
       headers = { ...headers, ...data.getHeaders() };
+    } else if (this.options.data) {
+      data = encodeURIComponent(
+        Object.entries(this.options.data).map(([key, value]) => (value ? `${key}=${value}` : undefined)),
+      );
+      headers = { ...headers, 'content-type': 'application/x-www-form-urlencoded' };
     }
 
     return axios.request({ method: this.method, url: this.path, data, headers });
