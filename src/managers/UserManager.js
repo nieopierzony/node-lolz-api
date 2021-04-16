@@ -1,11 +1,81 @@
 'use strict';
 
 const BaseManager = require('./BaseManager');
+const UserFollower = require('./UserFollower');
 const User = require('../structures/User');
 
 class UserManager extends BaseManager {
   constructor(client, iterable) {
     super(client, iterable, User);
+  }
+
+  getProfilePosts(id, options, cache) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    return this.client.profilePosts.fetchUserPosts(id, options, cache);
+  }
+
+  async uploadAvatar(id, buffer) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    if (!buffer || !(buffer instanceof Buffer)) throw new TypeError('Неправильно указан баффер аватарки');
+    const endpoint = this.client.api.endpoints.Users.uploadAvatar(id);
+    await this.client.api.request('POST', endpoint, { data: { avatar: buffer } });
+    return this.fetch(id);
+  }
+
+  async deleteAvatar(id) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    const endpoint = this.client.api.endpoints.Users.uploadAvatar(id);
+    await this.client.api.request('DELETE', endpoint);
+    return this.fetch(id);
+  }
+
+  async getFollowers(id, query = {}) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    const endpoint = this.client.api.endpoints.Users.getFollowers(id);
+    const res = await this.client.api.request('GET', endpoint, { query });
+    return res.users.map(user => {
+      this.add(user);
+      return new UserFollower(this.client, user);
+    });
+  }
+
+  async follow(id) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    const endpoint = this.client.api.endpoints.Users.follow(id);
+    await this.client.api.request('POST', endpoint);
+    return this.fetch(id);
+  }
+
+  async unfollow(id) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    const endpoint = this.client.api.endpoints.Users.unfollow(id);
+    await this.client.api.request('POST', endpoint);
+    return this.fetch(id);
+  }
+
+  async getFollowings(id, query = {}) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    const endpoint = this.client.api.endpoints.Users.getFollowings(id);
+    const res = await this.client.api.request('GET', endpoint, { query });
+    const followings = res.users.map(user => {
+      this.add(user);
+      return new UserFollower(this.client, user);
+    });
+    return followings;
+  }
+
+  async ignore(id) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    const endpoint = this.client.api.endpoints.Users.ignore(id);
+    await this.client.api.request('POST', endpoint);
+    return this.fetch(id);
+  }
+
+  async unignore(id) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
+    const endpoint = this.client.api.endpoints.Users.unignore(id);
+    await this.client.api.request('DELETE', endpoint);
+    return this.fetch(id);
   }
 
   async create(email, username, password, options = {}) {
@@ -67,11 +137,11 @@ class UserManager extends BaseManager {
 
     const endpoint = this.client.api.endpoints.Users.find();
     const res = await this.client.api.request('GET', endpoint, { query });
-    const foundedUsers = res.users.map(user => this.add(user, cache));
-    return foundedUsers;
+    return res.users.map(user => this.add(user, cache));
   }
 
   async fetch(id, cache = true, force = false) {
+    if (!id) throw new TypeError('Необходимо указать ID пользователя');
     if (!force) {
       const existing = this.cache.get(id);
       if (existing) return existing;
