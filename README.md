@@ -15,9 +15,9 @@
 
 ## Table of contents
 
--- [About](#about)
--- [Installation](#installation)
--- [Example usage](#example usage)
+- [About](#about)
+- [Installation](#installation)
+- [Example usage](#example usage)
 
 ##About
 
