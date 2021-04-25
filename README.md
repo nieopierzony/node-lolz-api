@@ -5,7 +5,7 @@
   </p>
   <br />
   <p>
-    <a href="https://lolz.guru/nieopierzony/"><img src="https://raster.shields.io/badge/Author-nieopierzony-green.svg" alt="Developer" /></a>
+    <a href="https://lolz.guru/nieopierzony/"><img src="https://raster.shields.io/badge/Author-nieopierzony-red.svg" alt="Developer" /></a>
+    <a href="https://lolz.guru/traviq/"><img src="https://raster.shields.io/badge/Helper-trvq-blue.svg" alt="Developer" /></a>
     
       </p>
-  <p>
