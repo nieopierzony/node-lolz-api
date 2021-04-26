@@ -15,11 +15,11 @@
 
 ## Table of contents
 
-- [About](#about)
-- [Installation](#installation)
-- [Example usage](#example-usage)
+- [Информация](#информация)
+- [Установка](#установка)
+- [Пример использования](#пример-использования)
 
-## About
+## Информация
 
 Lolzteam.js это [Node.js](https://nodejs.org) библеотека с помощью который вы с лёгкостью сможете работать с
 [Lolzteam API](https://lolz.guru/account/api).
