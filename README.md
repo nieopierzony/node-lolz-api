@@ -5,8 +5,8 @@
   </p>
   <br />
   <p>
-    <a href="https://lolz.guru/nieopierzony/"><img src="https://raster.shields.io/badge/Author-nieopierzony-red.svg" alt="Developer" /></a>
-    <a href="https://lolz.guru/traviq/"><img src="https://raster.shields.io/badge/Helper-trvq-blue.svg" alt="Helper" /></a>
+    <a href="https://lolz.guru/nieopierzony/"><img src="https://raster.shields.io/badge/Автор-nieopierzony-red.svg" alt="Developer" /></a>
+    <a href="https://lolz.guru/traviq/"><img src="https://raster.shields.io/badge/Хелпер-trvq-blue.svg" alt="Helper" /></a>
  </p>
   
   
@@ -21,17 +21,16 @@
 
 ## About
 
-Lolzteam.js is a pretty [Node.js](https://nodejs.org) module that allows you to easily interact with the
-[Discord API](https://lolz.guru/account/api).
+Lolzteam.js это [Node.js](https://nodejs.org) библеотека с помощью который вы с лёгкостью сможете работать с
+[Lolzteam API](https://lolz.guru/account/api).
 
-## Installation
+## Установка
 
-**Node.js `vv.v.v` or newer is required.**  
-Ignore any warnings about unmet peer dependencies, as they're all optional.
+**Node.js `vv.v.v` или более новая версия.**
 
-Latest version: `npm install lolzteam.js`  
+Актуальная версия: `npm install lolzteam.js`  
 
-## Example usage
+## Пример использования
 
 ```js
 /*
